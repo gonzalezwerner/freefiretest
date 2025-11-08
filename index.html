@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free fire - by Alejandro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Fondo animado con grid cyberpunk */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 20s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes gridScroll {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+        
+        /* Partículas flotantes */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #0ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Header con logo */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: glitchTitle 3s ease-in-out infinite;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(45deg, #0ff, #f0f, #0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px #0ff) drop-shadow(0 0 15px #0ff) drop-shadow(0 0 30px #0ff);
+            }
+            50% {
+                filter: drop-shadow(0 0 10px #f0f) drop-shadow(0 0 25px #f0f) drop-shadow(0 0 50px #f0f);
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #0ff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        
+        /* Card principal */
+        .card {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid #0ff;
+            border-radius: 20px;
+            padding: 50px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                0 0 40px rgba(0, 255, 255, 0.2),
+                inset 0 0 60px rgba(0, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: scanline 4s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%) rotate(45deg); }
+            100% { transform: translateY(100%) rotate(45deg); }
+        }
+        
+        /* Esquinas decorativas */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #f0f;
+        }
+        
+        .corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+        
+        /* Formulario */
+        .form-group {
+            position: relative;
+            margin-bottom: 30px;
+            z-index: 1;
+        }
+        
+        label {
+            display: block;
+            font-size: 1.1em;
+            color: #0ff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.2em;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 255, 255, 0.1),
+                0 0 20px rgba(0, 255, 255, 0.2);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #f0f;
+            box-shadow: 
+                inset 0 0 20px rgba(255, 0, 255, 0.2),
+                0 0 30px rgba(255, 0, 255, 0.4),
+                0 0 50px rgba(255, 0, 255, 0.2);
+            transform: scale(1.02);
+        }
+        
+        input[type="text"]::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Botón cyberpunk */
+        .btn-send {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #0ff, #f0f);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 1.4em;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.5),
+                0 0 40px rgba(255, 0, 255, 0.3);
+        }
+        
+        .btn-send::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-send:hover::before {
+            left: 100%;
+        }
+        
+        .btn-send:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(255, 0, 255, 0.6);
+        }
+        
+        .btn-send:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-send:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Estado de carga */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            border: 4px solid rgba(0, 255, 255, 0.2);
+            border-top: 4px solid #0ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2em;
+            color: #0ff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Resultado */
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result.active {
+            display: block;
+        }
+        
+        .result.success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            color: #0f0;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .result.error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #f00;
+            color: #f00;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .result-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        /* Info adicional */
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 4px solid #0ff;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: rgba(0, 255, 255, 0.8);
+            z-index: 1;
+            position: relative;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5em;
+                letter-spacing: 4px;
+            }
+            
+            .card {
+                padding: 30px 20px;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+        }
+        
+        /* Efectos de glitch */
+        @keyframes glitchTitle {
+            0%, 90%, 100% {
+                transform: translate(0);
+            }
+            91% {
+                transform: translate(-2px, 2px);
+            }
+            92% {
+                transform: translate(2px, -2px);
+            }
+            93% {
+                transform: translate(-2px, 2px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Grid de fondo -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Partículas -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="logo">FF SENDER</h1>
+            <p class="subtitle">Request System v2.0</p>
+        </div>
+        
+        <!-- Card principal -->
+        <div class="card">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <form id="sendForm">
+                <div class="form-group">
+                    <label for="uid">INGRESA TU UID</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="uid" 
+                            name="uid" 
+                            placeholder="123456789"
+                            required
+                            pattern="[0-9]+"
+                            maxlength="20"
+                        >
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-send" id="btnSend">
+                    ENVIAR REQUEST
+                </button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p class="loading-text">Procesando...</p>
+            </div>
+            
+            <div class="result" id="result">
+                <div class="result-icon" id="resultIcon"></div>
+                <p id="resultMessage"></p>
+            </div>
+            
+            <div class="info">
+                <strong>⚡ INFORMACIÓN:</strong> Este sistema envía requests al servidor de forma segura. Asegúrate de ingresar un UID válido.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Crear partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        // Manejo del formulario
+        const form = document.getElementById('sendForm');
+        const uidInput = document.getElementById('uid');
+        const btnSend = document.getElementById('btnSend');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const resultIcon = document.getElementById('resultIcon');
+        const resultMessage = document.getElementById('resultMessage');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const uid = uidInput.value.trim();
+            
+            if (!uid) {
+                showResult(false, 'Por favor ingresa un UID válido');
+                return;
+            }
+            
+            // Deshabilitar botón y mostrar loading
+            btnSend.disabled = true;
+            loading.classList.add('active');
+            result.classList.remove('active');
+            
+            try {
+                const url = `https://spam-fr-lk-team.vercel.app/send_requests?uid=${uid}`;
+                const response = await fetch(url);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult(true, `✅ Request enviado exitosamente para UID: ${uid}`);
+                } else {
+                    showResult(false, `❌ Error ${response.status}: No se pudo procesar el request`);
+                }
+            } catch (error) {
+                showResult(false, `❌ Error de conexión: ${error.message}`);
+            } finally {
+                btnSend.disabled = false;
+                loading.classList.remove('active');
+            }
+        });
+        
+        function showResult(success, message) {
+            result.className = 'result active ' + (success ? 'success' : 'error');
+            resultIcon.textContent = success ? '✓' : '✗';
+            resultMessage.textContent = message;
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                result.classList.remove('active');
+            }, 5000);
+        }
+        
+        // Efecto de tipeo en el input
+        uidInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+        
+        // Efectos de sonido simulados con vibraciones (solo en móviles)
+        btnSend.addEventListener('click', () => {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        });
+    </script>
+</body>
+</html>
